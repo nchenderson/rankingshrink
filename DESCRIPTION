@@ -1,0 +1,11 @@
+Package: rankingshrink
+Type: Package
+Title: Data Integration and Risk Prediction using Ranking Comparisons
+Version: 0.1
+Date: 2022-10-11
+Authors@R: c(person("Nicholas", "Henderson", email = "nchender@umich.edu", role = c("cre", "aut")), person("Ravi", "Varadhan", email = "ravi.varadhan@jhu.edu", role = "aut"))
+Maintainer: Nicholas Henderson <nchender@umich.edu>
+Imports: stats, utils
+Description: fill in later
+License: GPL-2
+Encoding: UTF-8
