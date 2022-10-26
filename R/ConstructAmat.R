@@ -14,25 +14,6 @@ ConstructAmat <- function(X, nu) {
   return(A)
 }
 
-#ConstructA2 <- function(X, nu) {
-#  n <- nrow(X)
-#  A <- matrix(0, n*n, ncol(X))
-#  count <- 1
-#  for(i in 1:n) {
-#    for(j in 1:n) {
-#      A[count,] <- (X[i,] - X[j,])/nu
-#      count <- count + 1
-#    }
-#  }
-##  return(A)
-#}
-#n <- 20000
-#p <- 15
-#X <- matrix(rnorm(n*p), nrow=n, ncol=p)
-#system.time(A1 <- ConstructA(X, nu=2))
-#system.time(A2 <- ConstructA2(X, nu=2))
-#all.equal(A1, A2)
-
 
 
 

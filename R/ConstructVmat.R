@@ -1,6 +1,8 @@
 ConstructVmat <- function(y, external.ranking, lambda,
                         discrepancy, internal.obj) {
    ## The returned matrix should be n^2 x n^2
+   ## We only need to return the diagonals of the matrix V
+
    ## Use Reduce for the marginalized matrix multiplication.
     # https://stackoverflow.com/questions/53285930/multiplication-of-many-matrices-in-r
    n <- length(y)
@@ -17,5 +19,5 @@ ConstructVmat <- function(y, external.ranking, lambda,
       CompareY <- outer(y, y) > 0
       Vmat <- (2*lambda/(n*n-1))*(0.5 - CompareRanks) + CompareY
    }
-   return(Vmat)
+   return(c(Vmat))
 }
