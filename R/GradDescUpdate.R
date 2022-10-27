@@ -12,13 +12,13 @@ GradDescUpdate <- function(par, y, X, A, V, nu,
      beta.new <- beta.tmp/sqrt(sum(beta.tmp*beta.tmp))
   } else {
      if(internal.obj=="gaussian") {
-        gradh <- crossprod(X, y - X%*%par)/n
+        gradh <- crossprod(X, X%*%par - y)/n
      } else if(internal.obj=="logistic") {
         X.beta <- as.numeric(X%*%par)
         gradh <- crossprod(X, y - plogis(X.beta))/n
      }
      theta.hat <- as.numeric(X%*%par)/nu
-     A.beta <- c(outer(theta.hat, theta.hat, FUN="-"))
+     A.beta <- A%*%par
      mu.tmp <- plogis(A.beta)
      vmu.tmp <- V*as.vector(mu.tmp*(1 - mu.tmp))
      gradf <- gradh + crossprod(A, vmu.tmp)

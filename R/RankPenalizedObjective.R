@@ -1,13 +1,12 @@
 RankPenalizedObj <- function(par, y, X, A, V, nu,
                                internal.obj, stplngth) {
   n <- length(y)
+  #print(dim(A))
   if(internal.obj=="auc") {
      stop("Nonparametric option not available yet")
   } else if(internal.obj=="gaussian") {
      X.beta <- X%*%par
-     resids <- y - X.beta
-     theta.hat <- as.numeric(X.beta)/nu
-     A.beta <- c(outer(theta.hat, theta.hat, FUN="-"))
+     A.beta <- A%*%par
      mu.tmp <- plogis(A.beta)
 
      hI <- mean(X.beta*y) - mean(X.beta*X.beta)/2

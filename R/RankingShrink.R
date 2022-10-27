@@ -16,9 +16,9 @@ RankingShrink <- function(y, X, lambda, external.scores, internal.obj="gaussian"
   if(is.null(nu)) {
     ## Create a method to calculate a default value of nu
     if(intercept) {
-        beta.avg <- mean(initial.pars[-1])
+        beta.avg <- mean(abs(initial.pars[-1]))
     } else {
-        beta.avg <- mean(initial.pars)
+        beta.avg <- mean(abs(initial.pars))
     }
     nu <- 0.4*beta.avg
   }
@@ -31,7 +31,7 @@ RankingShrink <- function(y, X, lambda, external.scores, internal.obj="gaussian"
   Lf <- FindLipschitz(Xnorm, Amat, Vmat, internal.obj)
   stplngth <- 1/Lf
   ## it's probably safe, in practice, to use 8 times this step length
-  stplngth <- 8*stplngth
+  #stplngth <- 8*stplngth
 
   objfnvals <- rep(NA, maxiter + 1)
   beta.old <- initial.pars

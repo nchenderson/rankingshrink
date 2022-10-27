@@ -7,7 +7,7 @@ ConstructVmat <- function(y, external.ranking, lambda,
     # https://stackoverflow.com/questions/53285930/multiplication-of-many-matrices-in-r
    n <- length(y)
    if(discrepancy=="spearman" & internal.obj!="auc") {
-      Vmat <- -lambda*matrix(external.ranking, nrow=n, ncol=n)/(4*n*n)
+      Vmat <- (-lambda/(4*n*n))*rep(external.ranking, each=n)
    } else if(discrepancy=="spearman" & internal.obj == "auc") {
       CompareY <- outer(y, y) > 0
       Vmat <- -lambda*matrix(rep(external.ranking, each=n), nrow=n, ncol=n)/(4*n*n) + CompareY
