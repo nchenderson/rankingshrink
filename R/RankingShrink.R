@@ -1,5 +1,6 @@
 RankingShrink <- function(y, X, lambda, external.scores, internal.obj="gaussian",
-                          discrepancy="spearman", nu=NULL, maxiter=500) {
+                          discrepancy="spearman", nu=NULL, maxiter=500,
+                          optimization="direct") {
 
   ## first standardize X
   Xnorm <- scale(X)
@@ -38,27 +39,31 @@ RankingShrink <- function(y, X, lambda, external.scores, internal.obj="gaussian"
   objfnvals[1] <- RankPenalizedObj(par=beta.old, y=y, X=Xnorm, A=Amat,
                                    V=Vmat, nu=nu, internal.obj=internal.obj,
                                    stplngth=stplngth)[1]
-  penaltyvals <- rep(NA, maxiter + 1)
-  penaltyvals[1] <- RankPenalizedObj(par=beta.old, y=y, X=Xnorm, A=Amat,
+
+  if( optimization!= "direct") {
+
+     opt_ans <- optimg(par=beta.old, fn=RankPenalizedObj, y=y, X=Xnorm, A=Amat,
+                       V=Vmat, nu=nu, internal.obj= internal.obj, stplngth=stplngth,
+                       method="ADAM", maxit=maxiter)
+     objfnvals <- opt_ans$value
+     beta.old <- opt_ans$par
+  } else {
+     for(k in 1:maxiter) {
+        beta.new <- GradDescUpdate(par=beta.old, y=y, X=Xnorm, A=Amat,
                                    V=Vmat, nu=nu, internal.obj=internal.obj,
-                                   stplngth=stplngth)[2]
-  for(k in 1:maxiter) {
-      beta.new <- GradDescUpdate(par=beta.old, y=y, X=Xnorm, A=Amat,
-                                 V=Vmat, nu=nu, internal.obj=internal.obj,
-                                 stplngth=stplngth)
-      tmp <- RankPenalizedObj(par=beta.new, y=y, X=Xnorm, A=Amat,
-                                         V=Vmat, nu=nu, internal.obj=internal.obj,
-                                         stplngth=stplngth)
-      objfnvals[k+1] <- tmp[1]
-      penaltyvals[k+1] <- tmp[2]
-      beta.old <- beta.new
+                                   stplngth=stplngth)
+        tmp <- RankPenalizedObj(par=beta.new, y=y, X=Xnorm, A=Amat,
+                                V=Vmat, nu=nu, internal.obj=internal.obj,
+                                stplngth=stplngth)
+         objfnvals[k+1] <- tmp
+         beta.old <- beta.new
+     }
   }
   fitted.vals <- NULL
   if(internal.obj=="gaussian") {
       fitted.vals <- as.vector(Xnorm%*%beta.old)
   }
-  return(list(coef=beta.old, objfnvals=objfnvals, fitted.values=fitted.vals,
-              penaltyvals=penaltyvals))
+  return(list(coef=beta.old, objfnvals=objfnvals, fitted.values=fitted.vals))
 }
 
 
