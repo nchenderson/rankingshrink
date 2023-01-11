@@ -21,6 +21,7 @@ GradDescUpdate <- function(par, y, X, A, V, nu,
      A.beta <- A%*%par
      mu.tmp <- plogis(A.beta)
      vmu.tmp <- V*as.vector(mu.tmp*(1 - mu.tmp))
+
      gradf <- gradh + crossprod(A, vmu.tmp)
 
      beta.new <- par - stplngth*gradf
