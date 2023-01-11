@@ -67,15 +67,38 @@ prior.model <- lm(prog ~ age + sex + map, data=diabetes.old)
 y <- diabetes.new$prog
 X <- cbind(rep(1, nrow(diabetes.new)), as.matrix(diabetes.new[,1:10]))
 Z <- model.matrix(prog ~ age + sex + map, data=diabetes.new)
-external.scores <- as.vector(Z%*%prior.model$coefficients)
+external.scores <- as.vector(Z \%*\% prior.model$coefficients)
 
-tst <- RankingShrink(y=y, X=X, lambda=0, external.scores=external.scores,
-                     maxiter=50)
+tst <- RankingShrink(y=y, X=X, lambda=0,
+                     external.scores=external.scores,
+                     optimization="optimg", maxiter=50)
 rank_fitted <- tst$fitted.values
 ols <- lm(y ~ X - 1)$fitted.values
 plot(ols, rank_fitted)
 cor(ols, rank_fitted)
 cor(external.scores, rank_fitted)
+
+\dontrun{
+lam.seq <- exp(seq(0, 10, length.out=20))
+cols.seq <- cext.seq <- rep(NA, 20)
+for(k in 1:20) {
+  tst <- RankingShrink(y=y, X=X, lambda=lam.seq[k],
+                       external.scores=external.scores,
+                       maxiter=50, optimization="optimg")
+  rank_fitted <- tst$fitted.values
+
+  cols.seq[k] <- cor(ols, rank_fitted, method="spearman")
+  cext.seq[k] <- cor(external.scores, rank_fitted, method="spearman")
+}
+
+plot(lam.seq, cols.seq, type="n", ylim=c(0.5, 1),
+     xlab="lambda", ylab="Rank Correlation",
+     main="Correlation with Other Methods")
+lines(lam.seq, cols.seq)
+lines(lam.seq, cext.seq, col="red")
+legend("bottomleft", legend=c("OLS", "External"),
+       col=c("black","red"), bty='n', lwd=2)
+}
 
 }
 \keyword{ regression }
