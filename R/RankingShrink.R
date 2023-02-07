@@ -59,11 +59,14 @@ RankingShrink <- function(y, X, lambda, external.scores, internal.obj="gaussian"
          beta.old <- beta.new
      }
   }
+  aic_vals <- AIC(par=beta.old, y=y, X=Xnorm, A=Amat, V=Vmat, internal.obj=internal.obj)
+
   fitted.vals <- NULL
   if(internal.obj=="gaussian") {
       fitted.vals <- as.vector(Xnorm%*%beta.old)
   }
-  return(list(coef=beta.old, objfnvals=objfnvals, fitted.values=fitted.vals))
+  return(list(coef=beta.old, objfnvals=objfnvals, fitted.values=fitted.vals,
+              aic=aic_vals$aic, aic_correct=aic_vals$aic_correct))
 }
 
 
