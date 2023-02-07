@@ -59,8 +59,8 @@ Nicholas Henderson
 }
 \examples{
 data(diabetes)
-diabetes.old <- diabetes[1:100,]
-diabetes.new <- diabetes[101:442,]
+diabetes.old <- diabetes[1:350,]
+diabetes.new <- diabetes[351:442,]
 
 prior.model <- lm(prog ~ age + sex + map, data=diabetes.old)
 
