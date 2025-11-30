@@ -1,4 +1,4 @@
-export(RankingShrink, GradDescUpdate, ConstructVmat, ConstructAmat, FindLipschitz, RankPenalizedObj, GetInitialPars)
+export(RankingShrink, GradDescUpdate, ConstructVmat, ConstructAmat, FindLipschitz, RankPenalizedObj, GetInitialPars, rpenlm, LooCV)
 importFrom("stats", "dnorm")
 importFrom("utils", "modifyList")
 importFrom("optimg", "optimg")
